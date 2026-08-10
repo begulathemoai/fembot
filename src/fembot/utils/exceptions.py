@@ -1,2 +1,2 @@
-class NoProvidedValueError(Exception):
+class NoValueProvidedError(Exception):
     pass

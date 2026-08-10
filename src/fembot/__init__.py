@@ -8,14 +8,16 @@ import os
 
 import dotenv
 
-from . import commands, events, utils
+from . import commands as commands
+from . import events as events
+from . import utils
 
 
 def main() -> None:
     dotenv.load_dotenv()
     discord_bot_token: str = os.getenv("DISCORD_BOT_TOKEN", None)
     if discord_bot_token is None:
-        raise utils.exceptions.NoProvidedValueError(
+        raise utils.exceptions.NoValueProvidedError(
             "No token was provided through DISCORD_BOT_TOKEN."
         )
     utils.globals.client.run(discord_bot_token)
