@@ -31,3 +31,6 @@ the second was in python but was *bad*<br>
 this one is in python and is *less bad*
 
 this is my own bad code, no ai was used (tho the ruff linter saved my honor multiple times) (more like tuff linter)
+<br><br><br><br><br><br><br>
+this might come as a surprise to many but this bot is currently french<br>
+i'll add translation strings & an english translation later (famous last words)
