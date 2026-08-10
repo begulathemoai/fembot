@@ -1,6 +1,6 @@
 # The cutest discord bot
 
-will do a lot of more or less cool stuff (when everything from the second version will have been reimplemented) like
+will do a lot of more or less cool stuff (when everything from the second version will have been reimplemented) like :
 - personal channels
 - music playback in VCs (kinda bad tho) with a (bad) playlist system
 - downloading from yt and other platforms with the goat yt-dlp
@@ -25,9 +25,9 @@ will do a lot of more or less cool stuff (when everything from the second versio
 - bully people for not removing tracking from yt links
 
 
-this is the third ~~rewrite~~ version of fembot
-the first was in JS (ew)
-the second was in python but was *bad*
+this is the third ~~rewrite~~ version of fembot <br>
+the first was in JS (ew)<br>
+the second was in python but was *bad*<br>
 this one is in python and is *less bad*
 
 this is my own bad code, no ai was used (tho the ruff linter saved my honor multiple times) (more like tuff linter)
