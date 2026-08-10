@@ -1,0 +1,2 @@
+class NoProvidedValueError(Exception):
+    pass
