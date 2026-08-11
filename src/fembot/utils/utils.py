@@ -1,4 +1,14 @@
 # should NOT require any fembot module
+import re
+
+
+def regex_checker(p_input: str, rgx: list) -> bool:
+    check = False
+    for i in rgx:
+        if re.search(i, p_input) is not None:
+            check = True
+    print("check")
+    return check
 
 
 def check_string(string: str, pattern: str) -> bool:

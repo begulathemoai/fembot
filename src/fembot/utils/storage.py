@@ -50,6 +50,13 @@ guild_id INTEGER NOT NULL
 
 );
 """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS kirky_messages (
+uid INTEGER PRIMARY KEY AUTOINCREMENT,
+guild_id INTEGER NOT NULL,
+message VARCHAR(255) NOT NULL
+);
+""")
     db.commit()
     try:
         cursor.execute("""ALTER TABLE guilds ADD new_channel_category_id INT;""")
@@ -73,6 +80,11 @@ guild_id INTEGER NOT NULL
         db.commit()
     except sqlite3.OperationalError:
         pass
+    try:
+        cursor.execute("""ALTER TABLE guilds ADD enable_the_kirk INT;""")
+        db.commit()
+    except sqlite3.OperationalError:
+        pass
     global initialized
     initialized = True
 
@@ -82,7 +94,7 @@ guild_id INTEGER NOT NULL
 
 def row_to_dict(row: sqlite3.Row):
     new_dict: dict = {}
-    for i in row.keys():
+    for i in row.keys():  # noqa: SIM118 # kys ruff this time i'm right you can't just remove .keys()
         new_dict[i] = row[i]
     return new_dict
 
@@ -123,14 +135,35 @@ def get_guild(guild_id: int) -> dict:
 
 def set_guild(guild_id: int, property: str, value) -> None:
     cursor.execute(
-        """UPDATE guilds SET ? = ? WHERE guild_id == ?""",
-        (
-            property,
-            value,
-            guild_id,
-        ),
+        f"""UPDATE guilds
+         SET {property} == :value
+         WHERE guild_id == :guild_id""",
+        {
+            "value": value,
+            "guild_id": guild_id,
+        },
     )
     db.commit()
+
+
+def add_kirky_message(message: str, guild_id: int) -> None:
+    cursor.execute(
+        """INSERT INTO kirky_messages (guild_id, message) VALUES (?, ?)""",
+        (guild_id, message),
+    )
+    db.commit()
+
+
+def get_kirky_message(guild_id: int) -> str | None:
+    cursor.execute(
+        """SELECT message FROM kirky_messages WHERE guild_id == ? ORDER BY RANDOM() LIMIT 1;""",
+        (guild_id,),
+    )
+    result = cursor.fetchone()
+    if result == None:
+        return None
+    else:
+        return result[0]
 
 
 def uid_to_guild_id(uid: int) -> int:

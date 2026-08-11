@@ -20,26 +20,25 @@ class PermissionLevel(Enum):
 async def get_highest_permission(
     member: discord.Member | discord.User, guild: discord.Guild
 ) -> PermissionLevel:
+    print(guild.owner_id, " ", member.id)
     if member.id == globals.owner_id:
         return PermissionLevel.BOT_OWNER
-    elif (member is discord.Member and member.guild.owner == member) or (
-        member is discord.User and member.id == guild.owner.id
-    ):
+    elif member.id == guild.owner_id:
         return PermissionLevel.SERVER_OWNER
     elif (
-        member is discord.Member
+        type(member) is discord.Member
         and member.guild_permissions.administrator
         or (
-            member is discord.User
+            type(member) is discord.User
             and (await guild.fetch_member(member.id)).guild_permissions.administrator
         )
     ):
         return PermissionLevel.ADMIN
     elif (
-        member is discord.Member
+        type(member) is discord.Member
         and member.guild_permissions.manage_messages
         or (
-            member is discord.User
+            type(member) is discord.User
             and (await guild.fetch_member(member.id)).guild_permissions.manage_messages
         )
     ):

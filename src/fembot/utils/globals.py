@@ -1,4 +1,5 @@
 import os
+import re
 
 import discord
 import discord.app_commands
@@ -74,3 +75,22 @@ def is_guild_allowed(id: int):
         return True
     else:
         return id in guild_whitelist
+
+
+NWORD_REGEX = re.compile(
+    "[nոⁿₙNΝՆᴎℕꓠＮᴺŋɴꞃ][i1íïⁱᵢIⅠⅠⅼ丨ιℐℑ∣⍳Ⲓⵏꓲᴵ][gġɡցᶃǥǵᵍGℊ⅁ꓖＧᴳցǵǥ]{1,2}[e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲ][rгᴦʳRΓℛⲢꓣＲᴿɼʁꝛ]",
+    re.IGNORECASE | re.MULTILINE,
+)
+NWORD_REGEX_BUT_FRENCH = re.compile(
+    "[nոⁿₙNΝՆᴎℕꓠＮᴺŋɴꞃ][e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲ][gġɡցᶃǥǵᵍGℊ⅁ꓖＧᴳցǵǥ][rгᴦʳRΓℛⲢꓣＲᴿɼʁꝛ][e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲoоοօȯọỏơóòöᵒºOΟОՕ०ꓳ〇ⲞⲟＯᴼ]",
+    re.IGNORECASE | re.MULTILINE,
+)
+YOUTUBE_TRACKING_REGEXES = list(
+    map(
+        re.compile,
+        [
+            r"https\:\/\/youtube\.com\/watch\?v=\w+\&si=[a-zA-Z0-9_\-]+",
+            r"https\:\/\/youtu\.be\/\w+\?si=[a-zA-Z0-9_\-]+",
+        ],
+    )
+)

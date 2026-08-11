@@ -83,9 +83,12 @@ async def check_message(
 ) -> bool:
     check = True
     ct = message.content.lower()
-    if not globals.guilds[str(message.guild.id)].replies:
+    if not globals.guilds[message.guild.id].no_ping_replies_enabled:
         return False
-    if not name and not globals.guilds[str(message.guild.id)].unprompted_replies:
+    if (
+        not name
+        and not globals.guilds[message.guild.id].unprompted_no_ping_replies_enabled
+    ):
         return False
     if name and check:
         if or_answer:
@@ -130,36 +133,6 @@ def regex_checker(p_input: str, rgx: list) -> bool:
     return check
 
 
-NWORD_REGEX = re.compile(
-    "[nոⁿₙNΝՆᴎℕꓠＮᴺŋɴꞃ][i1íïⁱᵢIⅠⅠⅼ丨ιℐℑ∣⍳Ⲓⵏꓲᴵ][gġɡցᶃǥǵᵍGℊ⅁ꓖＧᴳցǵǥ]{1,2}[e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲ][rгᴦʳRΓℛⲢꓣＲᴿɼʁꝛ]",
-    re.IGNORECASE | re.MULTILINE,
-)
-NWORD_REGEX_BUT_FRENCH = re.compile(
-    "[nոⁿₙNΝՆᴎℕꓠＮᴺŋɴꞃ][e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲ][gġɡցᶃǥǵᵍGℊ⅁ꓖＧᴳցǵǥ][rгᴦʳRΓℛⲢꓣＲᴿɼʁꝛ][e3еẹėéèₑᵉEΕЕᎬⴹꓰＥ𑢮ᴱɛɇꬲoоοօȯọỏơóòöᵒºOΟОՕ०ꓳ〇ⲞⲟＯᴼ]",
-    re.IGNORECASE | re.MULTILINE,
-)
-YOUTUBE_TRACKING_REGEXES = list(
-    map(
-        re.compile,
-        [
-            r"https\:\/\/youtube\.com\/watch\?v=\w+\&si=[a-zA-Z0-9_\-]+",
-            r"https\:\/\/youtu\.be\/\w+\?si=[a-zA-Z0-9_\-]+",
-        ],
-    )
-)
-kirky_ass_messages = [
-    "\\*tel aviv impressed\\*",
-    "me when i'm trying to tell bro that he's too racist for me and that i HAVE to put him down for his own good but he cuts me off and starts talking about the roblox ugc market so i lowkirkestrogenuinely have to slime him",
-    "i can't stand it anymore",
-    "RAWAWAWAWAWAWAWAWAWAWAWAWA",
-    """Dude I'm so disappointed by the fart implementation in Tomodachi Life: Living The Dream. In the original, you'd just peek into their apartments to occasionally see them ripping wet ass and it was SO funny. They could be alone, or chilling with their friend. Didn't matter. It didn't discriminate who farted either. It could be Jesus, your grandma, your waifu, whatever. In this game though, you have to choose whether they fart or they don't, but the problem is, if you DO give them the quirk, all they fucking do is fart. It's not funny when they just saunter about letting them slip out 24/7. It was funny in the original because you were sleeping with one eye open-never knowing where or when it would happen next.""",
-    "Hey, fascist. Catch! ↑ → ↓↓↓",
-    "If you read this, you are gay.",
-    "Bella Ciao.",
-    "*Notices bulge* OwO what’s this?",
-]
-
-
 @globals.client.event
 async def on_message(message: discord.Message):
     global feur_counter, jojo_counter
@@ -173,10 +146,10 @@ async def on_message(message: discord.Message):
     if await check_message(
         message, "is/ok garmin unshut the fuck up", name=False
     ) or await check_message(message, "is/ok garmin unstfu", name=False):
-        globals.guilds[str(message.guild.id)].stfu_timestamp = 0
+        globals.guilds[message.guild.id].stfu_timestamp = 0
         await message.reply("stupit")
         return
-    if time.time() < globals.guilds[str(message.guild.id)].stfu_timestamp:
+    if time.time() < globals.guilds[message.guild.id].stfu_timestamp:
         return
     if (
         await check_message(message, ["panto:pant:pnato:pnat"], name=False)
@@ -194,14 +167,14 @@ async def on_message(message: discord.Message):
     ):
         await message.add_reaction(await message.guild.fetch_emoji(1280559079198167041))
     if regex_checker(
-        message.content.lower(), YOUTUBE_TRACKING_REGEXES
+        message.content.lower(), globals.YOUTUBE_TRACKING_REGEXES
     ) and await check_message(message, "", name=False):
         await message.reply(
             "sonion, le lien youtube que tu as envoyé contient du tracking (tout ce qui est derrière le si= ou &si=). je te conseille de l'enlever parce que sinon tous ceux qui cliqueront dessus seront reliés à toi (dont buseur :wilted_rose:).",
             file=discord.File("./trackingyt.jpg"),
         )
     elif regex_checker(
-        message.content.lower(), [NWORD_REGEX, NWORD_REGEX_BUT_FRENCH]
+        message.content.lower(), [globals.NWORD_REGEX, globals.NWORD_REGEX_BUT_FRENCH]
     ) and await check_message(message, "", name=False):
         await message.reply(
             "BUGALERTE :bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang:\n-# ||<@802854414300741633> ||\n-# https://cdn.discordapp.com/attachments/1347560244229832728/1407457407176675568/meme.gif"
@@ -211,7 +184,7 @@ async def on_message(message: discord.Message):
         if await check_message(
             message, "is/ok garmin shut the fuck up", name=False
         ) or await check_message(message, "is/ok garmin stfu", name=False):
-            globals.guilds[str(message.guild.id)].stfu_timestamp = time.time() + 60 * 60
+            globals.guilds[message.guild.id].stfu_timestamp = time.time() + 60 * 60
             await message.reply("\\:( i'll be quiet for an hour :wilted_rose:")
         elif await check_message(message, "is/ok garmin kill this man", name=False):
             if await kill(message, True, datetime.timedelta(hours=1)):
@@ -228,12 +201,35 @@ async def on_message(message: discord.Message):
                 )
         elif await check_message(message, "startswith/ok garmin say ", name=False):
             await message.reply(message.content.lower().removeprefix("ok garmin say "))
+        elif await check_message(message, "startswith/ok garmin help", name=False):
+            await message.reply("""garmin mode help :
+`ok garmin stfu`
+    -> stops the bot from replying for an hour (everyone)
+`ok garmin unstfu`
+    -> disables stfu mode (everyone)
+`ok garmin kill this man`
+    -> times out the user the og message is replying to for an hour (admin)
+`ok garmin triple dog death barrage`
+    -> times out the user the og message is replying to for a minute (everyone)
+`ok garmin HELP`
+    -> displays this message (everyone)
+`ok garmin <literally anything else>`
+    -> confuses the bot (every... one?)""")
         else:
             await message.reply("what")
     elif await check_message(message, "is/good morning", name=False):
         await message.reply("it's afternoon")
-    elif await check_message(message, "kirk", name=False):
-        await message.reply(random.choice(kirky_ass_messages))
+    elif (
+        await check_message(message, "kirk", name=False)
+        and globals.guilds[message.guild.id].enable_the_kirk
+    ):
+        result = globals.guilds[message.guild.id].get_kirky_message()
+        if result is None:
+            await message.reply(
+                "We Are Charlie KIRKKKKKKKKKKK WE CARRY THE FLAME WE'LL FIGHT FOR THE GOSPEL WE'LL HONOR HIS NAMEEEEEEE"
+            )
+        else:
+            await message.reply(result)
     elif await check_message(message, "i", "can't", "it", "anymore", name=False):
         await message.reply("IS THAT A MOTHERFUCKING CAMELLIA REFERENCE ?????")
     elif await check_message(message, "attention", name=False):

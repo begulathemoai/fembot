@@ -33,4 +33,5 @@ this one is in python and is *less bad*
 this is my own bad code, no ai was used (tho the ruff linter saved my honor multiple times) (more like tuff linter)
 <br><br><br><br><br><br><br>
 this may come as a surprise to many but this bot is currently french<br>
-i'll add translation strings & an english translation later (famous last words)
+i'll add translation strings & an english translation later (famous last words)<br>
+also this program is linux only (more like everything other than windows only) cuz i use env vars & directories that only exist on linux (`$XDG_DATA_HOME`)
