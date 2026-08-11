@@ -58,6 +58,15 @@ message VARCHAR(255) NOT NULL
 );
 """)
     db.commit()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS aliases (
+uid INTEGER PRIMARY KEY AUTOINCREMENT,
+guild_id INTEGER NOT NULL,
+name VARCHAR(255) NOT NULL,
+content VARCHAR(255) NOT NULL
+);
+""")
+    db.commit()
     try:
         cursor.execute("""ALTER TABLE guilds ADD new_channel_category_id INT;""")
         db.commit()
@@ -144,6 +153,34 @@ def set_guild(guild_id: int, property: str, value) -> None:
         },
     )
     db.commit()
+
+
+def add_alias(name: str, content: str, guild_id: int) -> None:
+    cursor.execute(
+        """INSERT INTO aliases (guild_id, name, content) VALUES (?, ?, ?)""",
+        (guild_id, name, content),
+    )
+    db.commit()
+
+
+def remove_alias(name: str, guild_id: int) -> None:
+    cursor.execute(
+        """DELETE FROM aliases WHERE guild_id == ? AND name == ?""",
+        (guild_id, name),
+    )
+    db.commit()
+
+
+def get_aliases(guild_id: int) -> dict[str, str]:
+    cursor.execute(
+        """SELECT * FROM aliases WHERE guild_id == ?""",
+        (guild_id,),
+    )
+    out: dict[str, str] = {}
+    rows: list[sqlite3.Row] = cursor.fetchall()
+    for i in rows:
+        out[i["name"]] = i["content"]
+    return out
 
 
 def add_kirky_message(message: str, guild_id: int) -> None:

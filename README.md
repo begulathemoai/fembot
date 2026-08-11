@@ -19,8 +19,8 @@ will do a lot of more or less cool stuff (when everything from the second versio
 - [ ] youtube search
 - [ ] have 1000 loc in the main file (no that was the second ver)
 - [x] use a sqlite database to store guild settings
-- [ ] allow you to ban users from it
-- [ ] allow them to say "i've been banned from fembot™ :bangbang:"
+- [x] allow you to ban users from it
+- [x] allow them to say "i've been banned from fembot™ :bangbang:"
 - [x] do bad jokes in french
 - [x] bully people for not removing tracking from yt links
 
@@ -34,4 +34,14 @@ this is my own bad code, no ai was used (tho the ruff linter saved my honor mult
 <br><br><br><br><br><br><br>
 this may come as a surprise to many but this bot is currently french<br>
 i'll add translation strings & an english translation later (famous last words)<br>
-also this program is linux only (more like everything other than windows only) cuz i use env vars & directories that only exist on linux (`$XDG_DATA_HOME`)
+also this program is linux only (more like everything other than windows only) cuz i use env vars & directories that only exist on linux (`$XDG_DATA_HOME`)<br>
+
+# Setup
+1. Make sure you have the `uv` package manager installed
+2. Clone this repo
+3. Open the root folder of the repo
+4. Run `uv sync`
+5. Input your discord token through `DISCORD_BOT_TOKEN` by using an .env file in the project root
+6. Start fembot with `uv run fembot`
+7. ???
+8. Profit

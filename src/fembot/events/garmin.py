@@ -95,7 +95,7 @@ class GarminParser:
         if user_perms.value >= perms.value:
             return True
         else:
-            self.message.reply(
+            await self.message.reply(
                 content=f"random kid :sob: (you need `{perms.name}` perms but you only have `{user_perms.name}`)"
             )
             return False
@@ -152,6 +152,44 @@ class GarminParser:
                 globals.guilds[self.message.guild.id].stfu_timestamp = 0
                 await self.message.reply("stupit")
                 return
+            case "add-alias":
+                if not await self.check_perms(auth.PermissionLevel.MOD):
+                    return
+                name = self.consume_token()
+                if name == "":
+                    await self.message.reply(
+                        "no name provided for alias\n-> format should be `ok garmin add-alias <name> <content>`"
+                    )
+                    return
+                content = self.message.content.removeprefix(
+                    "ok garmin add-alias " + name
+                ).removeprefix(" ")
+                if content == "":
+                    await self.message.reply(
+                        "no content provided for alias\n-> format should be `ok garmin add-alias <name> <content>`"
+                    )
+                    return
+                if globals.guilds[self.message.guild.id].add_alias(name, content):
+                    await self.message.reply("alias added successfully")
+                    return
+                else:
+                    await self.message.reply("this alias was already defined")
+                    return
+            case "remove-alias":
+                if not await self.check_perms(auth.PermissionLevel.MOD):
+                    return
+                name = self.consume_token()
+                if name == "":
+                    await self.message.reply(
+                        "no name provided for alias to remove\n-> format should be `ok garmin remove-alias <name>`"
+                    )
+                    return
+                if globals.guilds[self.message.guild.id].remove_alias(name):
+                    await self.message.reply("alias removed successfully")
+                    return
+                else:
+                    await self.message.reply("this alias does not exist")
+                    return
             case "help":
                 out: str = ""
                 user_perms: auth.PermissionLevel = await auth.get_highest_permission(
@@ -176,7 +214,13 @@ class GarminParser:
                 if user_perms >= auth.PermissionLevel.MOD:
                     out += """`MOD` commands :
 `ok garmin kill`
-    -> mutes the user the og message is replying to for an hour\n\n"""
+    -> mutes the user the og message is replying to for an hour
+`ok garmin add-alias <name> <content>`
+    -> adds an alias named <name> with content <content> that can be called back using `.<name>`
+`ok garmin remove-alias <name>`
+    -> removes the alias named <name> if it exists
+`ok garmin list-alias`
+    -> returns all registered aliases\n\n"""
                 if user_perms >= auth.PermissionLevel.ADMIN:
                     out += """`ADMIN` commands :
 `ok garmin list-settings`

@@ -4,8 +4,11 @@ from io import BufferedReader
 
 import discord
 import discord.app_commands
+import dotenv
 
 from . import guild_storage, logger
+
+dotenv.load_dotenv()
 
 TRIPLE_DOG_DEATH_BARRAGE: BufferedReader = open(  # noqa: SIM115
     os.path.join(os.path.dirname(__file__), "../assets/tripledog.jpg"), "rb"

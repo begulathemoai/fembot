@@ -151,7 +151,17 @@ async def on_message(message: discord.Message):
         await parser.process()
         del parser
         return
-
+    if (
+        message.content.startswith(".")
+        and message.content.strip().removeprefix(".")
+        in globals.guilds[message.guild.id].aliases
+    ):
+        await message.reply(
+            globals.guilds[message.guild.id].aliases[
+                message.content.strip().removeprefix(".")
+            ]
+        )
+        return
     if time.time() < globals.guilds[message.guild.id].stfu_timestamp:
         return
     if (

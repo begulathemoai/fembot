@@ -17,7 +17,7 @@ class PermissionLevel(Enum):
     SERVER_OWNER = 20
     BOT_OWNER = 25
 
-    def __eq__(self, __value: object) -> bool:
+    def __eq__(self, __value: object, /) -> bool:
         if type(__value) is PermissionLevel:
             return self.value == __value.value
         elif type(__value) is int:
@@ -27,7 +27,7 @@ class PermissionLevel(Enum):
                 f"PermissionLevel can't be compared with {type(__value).__name__}"
             )
 
-    def __gt__(self, __value: object) -> bool:
+    def __gt__(self, __value: object, /) -> bool:
         if type(__value) is PermissionLevel:
             return self.value > __value.value
         elif type(__value) is int:
@@ -37,7 +37,7 @@ class PermissionLevel(Enum):
                 f"PermissionLevel can't be compared with {type(__value).__name__}"
             )
 
-    def __ge__(self, __value: object) -> bool:
+    def __ge__(self, __value: object, /) -> bool:
         if type(__value) is PermissionLevel:
             return self.value >= __value.value
         elif type(__value) is int:
@@ -47,7 +47,7 @@ class PermissionLevel(Enum):
                 f"PermissionLevel can't be compared with {type(__value).__name__}"
             )
 
-    def __le__(self, __value: object) -> bool:
+    def __le__(self, __value: object, /) -> bool:
         if type(__value) is PermissionLevel:
             return self.value <= __value.value
         elif type(__value) is int:
@@ -57,7 +57,7 @@ class PermissionLevel(Enum):
                 f"PermissionLevel can't be compared with {type(__value).__name__}"
             )
 
-    def __lt__(self, __value: object) -> bool:
+    def __lt__(self, __value: object, /) -> bool:
         if type(__value) is PermissionLevel:
             return self.value < __value.value
         elif type(__value) is int:

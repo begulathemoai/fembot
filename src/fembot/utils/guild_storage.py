@@ -25,6 +25,8 @@ class GuildStorage:
     personal_channels_enabled: bool = False
     new_personal_channel_category_id: int = 0
 
+    aliases: dict[str, str]
+
     def __init__(self, guild: discord.Guild) -> None:
         self.kirky_ass_messages = [
             "\\*tel aviv impressed\\*",
@@ -56,6 +58,8 @@ class GuildStorage:
                 )
             if "enable_the_kirk" in data:
                 self.enable_the_kirk = bool(data["enable_the_kirk"])
+
+            self.aliases = storage.get_aliases(self.guild.id)
 
     async def create_pc_category(self) -> None:
         await self.guild.create_category(name="Personal Channels")
@@ -89,3 +93,19 @@ class GuildStorage:
             "enable_the_kirk",
             int(self.enable_the_kirk),
         )
+
+    def add_alias(self, name: str, content: str) -> bool:
+        if name in self.aliases:
+            return False
+
+        self.aliases[name] = content
+        storage.add_alias(name, content, self.guild.id)
+        return True
+
+    def remove_alias(self, name: str) -> bool:
+        if name not in self.aliases:
+            return False
+
+        self.aliases.pop(name)
+        storage.remove_alias(name, self.guild.id)
+        return True
