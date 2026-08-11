@@ -5,9 +5,9 @@ will do a lot of more or less cool stuff (when everything from the second versio
 - [ ] music playback in VCs (kinda bad tho) with a (bad) playlist system
 - [ ] downloading from yt and other platforms with the goat yt-dlp
 - [ ] timeouts limited to a singular channel
-- [ ] replying to random and not-so-random messages without being mentionned(can be disabled)
-- [ ] chatgpt but better :pray:
-- [ ] replying with random copypastas to the word "kirk"
+- [x] replying to random and not-so-random messages without being mentionned(can be disabled)
+- [x] chatgpt but better :pray:
+- [x] replying with random copypastas to the word "kirk"
 - [ ] message aliasing (you specify an alias and a message and when that alias is input the bot sends the message) (NEW)
 - [x] allowing you (yes, YOU) to larp as a dev
 - [x] randomly error out
@@ -15,14 +15,14 @@ will do a lot of more or less cool stuff (when everything from the second versio
 - [x] not have an automatic system to clear the cache
 - [ ] allow you to become one of its fans
 - [ ] wack it
-- [ ] garmin support (members with no perms can timeout someone else for a minute, can be disabled but is funny)
+- [x] garmin support (members with no perms can timeout someone else for a minute, can be disabled but is funny)
 - [ ] youtube search
 - [ ] have 1000 loc in the main file (no that was the second ver)
 - [x] use a sqlite database to store guild settings
 - [ ] allow you to ban users from it
 - [ ] allow them to say "i've been banned from fembot™ :bangbang:"
-- [ ] do bad jokes in french
-- [ ] bully people for not removing tracking from yt links
+- [x] do bad jokes in french
+- [x] bully people for not removing tracking from yt links
 
 
 this is the third ~~rewrite~~ version of fembot <br>

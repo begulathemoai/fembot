@@ -171,7 +171,7 @@ async def on_message(message: discord.Message):
     ) and await check_message(message, "", name=False):
         await message.reply(
             "sonion, le lien youtube que tu as envoyé contient du tracking (tout ce qui est derrière le si= ou &si=). je te conseille de l'enlever parce que sinon tous ceux qui cliqueront dessus seront reliés à toi (dont buseur :wilted_rose:).",
-            file=discord.File("./trackingyt.jpg"),
+            file=discord.File(globals.TRACKING_YT_CHART),
         )
     elif regex_checker(
         message.content.lower(), [globals.NWORD_REGEX, globals.NWORD_REGEX_BUT_FRENCH]
@@ -197,7 +197,7 @@ async def on_message(message: discord.Message):
             if await kill(message, False, datetime.timedelta(minutes=1)):
                 await message.reply(
                     "... timed out user for a minute.",
-                    file=discord.File("./tripledog.jpg"),
+                    file=discord.File(globals.TRIPLE_DOG_DEATH_BARRAGE),
                 )
         elif await check_message(message, "startswith/ok garmin say ", name=False):
             await message.reply(message.content.lower().removeprefix("ok garmin say "))

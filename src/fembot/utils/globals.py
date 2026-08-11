@@ -1,10 +1,19 @@
 import os
 import re
+from io import BufferedReader
 
 import discord
 import discord.app_commands
 
 from . import guild_storage, logger
+
+TRIPLE_DOG_DEATH_BARRAGE: BufferedReader = open(  # noqa: SIM115
+    os.path.join(os.path.dirname(__file__), "../assets/tripledog.jpg"), "rb"
+)  # no
+
+TRACKING_YT_CHART: BufferedReader = open(  # noqa: SIM115
+    os.path.join(os.path.dirname(__file__), "../assets/trackingyt.jpg"), "rb"
+)  # no the second
 
 # we define intents (these ones will do for now)
 intents = discord.Intents.default()
