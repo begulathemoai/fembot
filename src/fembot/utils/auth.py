@@ -17,14 +17,32 @@ class PermissionLevel(Enum):
     BOT_OWNER = 4
 
 
-def get_highest_permission(member: discord.Member | discord.User) -> PermissionLevel:
+async def get_highest_permission(
+    member: discord.Member | discord.User, guild: discord.Guild
+) -> PermissionLevel:
     if member.id == globals.owner_id:
         return PermissionLevel.BOT_OWNER
-    elif member is discord.Member and member.guild.owner == member:
+    elif (member is discord.Member and member.guild.owner == member) or (
+        member is discord.User and member.id == guild.owner.id
+    ):
         return PermissionLevel.SERVER_OWNER
-    elif member is discord.Member and member.guild_permissions.administrator:
+    elif (
+        member is discord.Member
+        and member.guild_permissions.administrator
+        or (
+            member is discord.User
+            and (await guild.fetch_member(member.id)).guild_permissions.administrator
+        )
+    ):
         return PermissionLevel.ADMIN
-    elif member is discord.Member and member.guild_permissions.manage_messages:
+    elif (
+        member is discord.Member
+        and member.guild_permissions.manage_messages
+        or (
+            member is discord.User
+            and (await guild.fetch_member(member.id)).guild_permissions.manage_messages
+        )
+    ):
         return PermissionLevel.MOD
     elif member.id in globals.banned_users:
         return PermissionLevel.BOT_BANNED
@@ -59,7 +77,9 @@ def auth(
                 )
                 return True
 
-            user_level: PermissionLevel = get_highest_permission(interaction.user)
+            user_level: PermissionLevel = await get_highest_permission(
+                interaction.user, interaction.guild
+            )
             if user_level == PermissionLevel.BOT_BANNED:
                 await interaction.response.send_message(
                     "Tu es banni de cette instance de fembot. Envoie un DM à son owner si tu penses que c'est une erreur.",

@@ -3,7 +3,7 @@ import os
 import discord
 import discord.app_commands
 
-from . import logger
+from . import guild_storage, logger
 
 # we define intents (these ones will do for now)
 intents = discord.Intents.default()
@@ -13,6 +13,22 @@ intents.message_content = True
 
 client: discord.Client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
+
+
+guilds: dict[int, guild_storage.GuildStorage] = {}
+
+
+test_server_id: int = -1
+try:
+    test_server_id = int(os.getenv("TEST_SERVER_ID", "-1"))
+except TypeError:
+    test_server_id = -1
+
+
+def is_test_server(guild_id: int) -> bool:
+    if test_server_id == -1:
+        return True
+    return guild_id == test_server_id
 
 
 owner_id: int

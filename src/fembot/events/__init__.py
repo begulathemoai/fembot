@@ -1,3 +1,3 @@
-from . import ready
+from . import message, ready
 
-__all__ = ("ready",)
+__all__ = ("message", "ready")

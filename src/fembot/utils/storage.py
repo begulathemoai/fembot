@@ -82,7 +82,7 @@ guild_id INTEGER NOT NULL
 
 def row_to_dict(row: sqlite3.Row):
     new_dict: dict = {}
-    for i in row:
+    for i in row.keys():
         new_dict[i] = row[i]
     return new_dict
 
