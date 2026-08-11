@@ -1,14 +1,14 @@
 ## i just copied shit from the v2
 ## i mean it works (?)
 
-import datetime
 import random
 import re
 import time
 
 import discord
 
-from ..utils import globals, utils
+from ..utils import auth, globals, utils
+from . import garmin
 
 feur_counter = 50
 jojo_counter = 250
@@ -129,7 +129,6 @@ def regex_checker(p_input: str, rgx: list) -> bool:
     for i in rgx:
         if re.search(i, p_input) is not None:
             check = True
-    print("check")
     return check
 
 
@@ -142,13 +141,17 @@ async def on_message(message: discord.Message):
         return
     if message.author == globals.client.user:
         return
-
-    if await check_message(
-        message, "is/ok garmin unshut the fuck up", name=False
-    ) or await check_message(message, "is/ok garmin unstfu", name=False):
-        globals.guilds[message.guild.id].stfu_timestamp = 0
-        await message.reply("stupit")
+    if (
+        await auth.get_highest_permission(message.author, message.guild)
+    ).value < auth.PermissionLevel.MEMBER.value:
         return
+
+    if message.content.startswith("ok garmin"):
+        parser: garmin.GarminParser = garmin.GarminParser(message)
+        await parser.process()
+        del parser
+        return
+
     if time.time() < globals.guilds[message.guild.id].stfu_timestamp:
         return
     if (
@@ -179,44 +182,6 @@ async def on_message(message: discord.Message):
         await message.reply(
             "BUGALERTE :bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang::bangbang:\n-# ||<@802854414300741633> ||\n-# https://cdn.discordapp.com/attachments/1347560244229832728/1407457407176675568/meme.gif"
         )
-
-    elif await check_message(message, "startswith/ok garmin ", name=False):
-        if await check_message(
-            message, "is/ok garmin shut the fuck up", name=False
-        ) or await check_message(message, "is/ok garmin stfu", name=False):
-            globals.guilds[message.guild.id].stfu_timestamp = time.time() + 60 * 60
-            await message.reply("\\:( i'll be quiet for an hour :wilted_rose:")
-        elif await check_message(message, "is/ok garmin kill this man", name=False):
-            if await kill(message, True, datetime.timedelta(hours=1)):
-                await message.reply(
-                    "sending in firing squad....... user has been timed out for an hour."
-                )
-        elif await check_message(
-            message, "is/ok garmin triple dog death barrage", name=False
-        ):
-            if await kill(message, False, datetime.timedelta(minutes=1)):
-                await message.reply(
-                    "... timed out user for a minute.",
-                    file=discord.File(globals.TRIPLE_DOG_DEATH_BARRAGE),
-                )
-        elif await check_message(message, "startswith/ok garmin say ", name=False):
-            await message.reply(message.content.lower().removeprefix("ok garmin say "))
-        elif await check_message(message, "startswith/ok garmin help", name=False):
-            await message.reply("""garmin mode help :
-`ok garmin stfu`
-    -> stops the bot from replying for an hour (everyone)
-`ok garmin unstfu`
-    -> disables stfu mode (everyone)
-`ok garmin kill this man`
-    -> times out the user the og message is replying to for an hour (admin)
-`ok garmin triple dog death barrage`
-    -> times out the user the og message is replying to for a minute (everyone)
-`ok garmin HELP`
-    -> displays this message (everyone)
-`ok garmin <literally anything else>`
-    -> confuses the bot (every... one?)""")
-        else:
-            await message.reply("what")
     elif await check_message(message, "is/good morning", name=False):
         await message.reply("it's afternoon")
     elif (
@@ -337,10 +302,10 @@ This is the Central Intelligentsia of the Chinese Communist Party. 您的 Intern
         await message.reply(
             "apagnan\n\nquoicoubeh quoicoubeh quoicoubeh quoicoubeh quoicoubeh quoicoubeh quoicoubeh coubeh coubeh"
         )
-    elif feur_counter == 300 and check_message(message, "", name=False):
+    elif feur_counter == 300 and await check_message(message, "", name=False):
         await message.reply("feur")
         feur_counter = 0
-    elif jojo_counter == 300 and check_message(message, "", name=False):
+    elif jojo_counter == 300 and await check_message(message, "", name=False):
         await message.reply("IS THAT A MOTHERFUCKING JOJO REFERENCE ?")
         jojo_counter = 0
     feur_counter += 1

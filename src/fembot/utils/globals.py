@@ -50,7 +50,21 @@ except TypeError:
     logger.log("The provided OWNER_ID was of an incorrect type.")
 # # #
 
-banned_users: list[int] = []
+bot_banned_users: list[int] = []
+# bot_banned_users init
+bot_banned_users_env_var: str = os.getenv("BOT_BANNED_USERS", "")
+if bot_banned_users_env_var != "":
+    for i in bot_banned_users_env_var.split(":"):
+        if i.isnumeric():
+            bot_banned_users.append(int(i))
+        else:
+            logger.log(
+                "Part of BOT_BANNED_USERS, "
+                + str(i)
+                + ", was not recognized as a valid integer."
+            )
+del bot_banned_users_env_var
+# # #
 
 ready: bool = False
 

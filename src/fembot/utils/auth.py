@@ -8,19 +8,69 @@ from . import globals
 
 
 class PermissionLevel(Enum):
-    BOT_BANNED = -2
-    SERVER_BANNED = -1
+    BOT_BANNED = -10
+    SERVER_BANNED = -5
     MEMBER = 0
-    MOD = 1
-    ADMIN = 2
-    SERVER_OWNER = 3
-    BOT_OWNER = 4
+    TRUSTED_MEMBER = 5
+    MOD = 10
+    ADMIN = 15
+    SERVER_OWNER = 20
+    BOT_OWNER = 25
+
+    def __eq__(self, __value: object) -> bool:
+        if type(__value) is PermissionLevel:
+            return self.value == __value.value
+        elif type(__value) is int:
+            return self.value == __value
+        else:
+            raise TypeError(
+                f"PermissionLevel can't be compared with {type(__value).__name__}"
+            )
+
+    def __gt__(self, __value: object) -> bool:
+        if type(__value) is PermissionLevel:
+            return self.value > __value.value
+        elif type(__value) is int:
+            return self.value > __value
+        else:
+            raise TypeError(
+                f"PermissionLevel can't be compared with {type(__value).__name__}"
+            )
+
+    def __ge__(self, __value: object) -> bool:
+        if type(__value) is PermissionLevel:
+            return self.value >= __value.value
+        elif type(__value) is int:
+            return self.value >= __value
+        else:
+            raise TypeError(
+                f"PermissionLevel can't be compared with {type(__value).__name__}"
+            )
+
+    def __le__(self, __value: object) -> bool:
+        if type(__value) is PermissionLevel:
+            return self.value <= __value.value
+        elif type(__value) is int:
+            return self.value <= __value
+        else:
+            raise TypeError(
+                f"PermissionLevel can't be compared with {type(__value).__name__}"
+            )
+
+    def __lt__(self, __value: object) -> bool:
+        if type(__value) is PermissionLevel:
+            return self.value < __value.value
+        elif type(__value) is int:
+            return self.value < __value
+        else:
+            raise TypeError(
+                f"PermissionLevel can't be compared with {type(__value).__name__}"
+            )
 
 
 async def get_highest_permission(
     member: discord.Member | discord.User, guild: discord.Guild
 ) -> PermissionLevel:
-    print(guild.owner_id, " ", member.id)
     if member.id == globals.owner_id:
         return PermissionLevel.BOT_OWNER
     elif member.id == guild.owner_id:
@@ -43,7 +93,7 @@ async def get_highest_permission(
         )
     ):
         return PermissionLevel.MOD
-    elif member.id in globals.banned_users:
+    elif member.id in globals.bot_banned_users:
         return PermissionLevel.BOT_BANNED
     else:
         return PermissionLevel.MEMBER
