@@ -113,6 +113,20 @@ class PlaybackManager:
             self.voice_client.stop()
         self.voice_client.play(self.audio_source, after=self.after_play_callback)
 
+    async def stop(self):
+
+        if self.voice_client.is_playing():
+            self.voice_client.stop()
+        if self.voice_client.is_connected():
+            await self.voice_client.disconnect()
+        self.playlist.clear()
+        self.max_rank = 0
+        self.current_song = None
+        self.current_uid = ""
+        self.next_up_song = None
+        self.next_up_uid = ""
+        storage.clear_playback_folder(self.guild.id)
+
     def after_play_callback(self, error: Exception) -> None:
         if self.next_up_uid != "":
             self.play(self.next_up_uid)

@@ -1,3 +1,3 @@
-from . import misc
+from . import misc, playback
 
-__all__ = ("misc",)
+__all__ = ("misc", "playback")

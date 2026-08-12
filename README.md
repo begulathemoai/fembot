@@ -3,12 +3,13 @@
 will do a lot of more or less cool stuff (when everything from the second version will have been reimplemented) like :
 - [ ] personal channels
 - [x] music playback in VCs (kinda bad tho) with a (bad) playlist system
+- [x] downloading discord attachments
 - [ ] downloading from yt and other platforms with the goat yt-dlp
 - [ ] timeouts limited to a singular channel
 - [x] replying to random and not-so-random messages without being mentionned(can be disabled)
 - [x] chatgpt but better :pray:
 - [x] replying with random copypastas to the word "kirk"
-- [ ] message aliasing (you specify an alias and a message and when that alias is input the bot sends the message) (NEW)
+- [x] message aliasing (you specify an alias and a message and when that alias is input the bot sends the message) (NEW)
 - [x] allowing you (yes, YOU) to larp as a dev
 - [x] randomly error out
 - [ ] get you "banned" from YT cuz ain't no way i'm implementing PO token bullshit for a shitpost bot

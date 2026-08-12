@@ -3,7 +3,7 @@
 import os
 import sqlite3  # i love SQL <3
 
-from . import exceptions, globals
+from . import exceptions, globals, logger
 
 ### i should maybe split up the folder management part from the db part but ehhhhh
 
@@ -32,6 +32,12 @@ def get_playback_storage_path(guild_id: int) -> str:
     return get_storage_path(guild_id) + "/playback"
 
 
+def clear_playback_folder(guild_id: int) -> None:
+    for j in os.listdir(storage_path + "/" + str(guild_id) + "/playback"):
+        os.remove(storage_path + "/" + str(guild_id) + "/playback/" + j)
+        logger.log(f"Removed temp playback file {j} for guild `{guild_id}`")
+
+
 # mixed part
 
 db = None
@@ -42,8 +48,11 @@ def init() -> None:
     for i in globals.client.guilds:
         if not os.path.exists(storage_path + "/" + str(i.id)):
             os.mkdir(storage_path + "/" + str(i.id), 0o755)
+            logger.log(f"Added storage folder for guild {i.name} (`{i.id}`)")
         if not os.path.exists(storage_path + "/" + str(i.id) + "/playback"):
             os.mkdir(storage_path + "/" + str(i.id) + "/playback", 0o755)
+            logger.log(f"Added playback storage folder for guild {i.name} (`{i.id}`)")
+        clear_playback_folder(i.id)
 
     global cursor, db
     db = sqlite3.connect(storage_path + "/" + "storage.db")
