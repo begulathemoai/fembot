@@ -28,6 +28,10 @@ def get_storage_path(guild_id: int) -> str:
     return storage_path + "/" + str(guild_id)
 
 
+def get_playback_storage_path(guild_id: int) -> str:
+    return get_storage_path(guild_id) + "/playback"
+
+
 # mixed part
 
 db = None
@@ -38,6 +42,8 @@ def init() -> None:
     for i in globals.client.guilds:
         if not os.path.exists(storage_path + "/" + str(i.id)):
             os.mkdir(storage_path + "/" + str(i.id), 0o755)
+        if not os.path.exists(storage_path + "/" + str(i.id) + "/playback"):
+            os.mkdir(storage_path + "/" + str(i.id) + "/playback", 0o755)
 
     global cursor, db
     db = sqlite3.connect(storage_path + "/" + "storage.db")
@@ -64,6 +70,14 @@ uid INTEGER PRIMARY KEY AUTOINCREMENT,
 guild_id INTEGER NOT NULL,
 name VARCHAR(255) NOT NULL,
 content VARCHAR(255) NOT NULL
+);
+""")
+    db.commit()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS trusted_members (
+uid INTEGER PRIMARY KEY AUTOINCREMENT,
+guild_id INTEGER NOT NULL,
+user_id INTEGER NOT NULL
 );
 """)
     db.commit()
@@ -111,6 +125,34 @@ def row_to_dict(row: sqlite3.Row):
 def has_guild(guild_id: int):
     cursor.execute("""SELECT * FROM guilds WHERE guild_id == ?""", (guild_id,))
     return len(cursor.fetchall()) > 0
+
+
+def add_trusted(guild_id: int, user_id: int) -> None:
+    cursor.execute(
+        """INSERT INTO trusted_members (guild_id, user_id) VALUES (?, ?)""",
+        (guild_id, user_id),
+    )
+    db.commit()
+
+
+def remove_trusted(guild_id: int, user_id: int) -> None:
+    cursor.execute(
+        """DELETE FROM trusted_members WHERE guild_id == ? AND user_id == ?""",
+        (guild_id, user_id),
+    )
+    db.commit()
+
+
+def get_trusted(guild_id: int) -> list[int]:
+    cursor.execute(
+        """SELECT * FROM trusted_members WHERE guild_id == ?""",
+        (guild_id,),
+    )
+    out: list[int] = []
+    rows: list[sqlite3.Row] = cursor.fetchall()
+    for i in rows:
+        out.append(i["user_id"])
+    return out
 
 
 def add_guild(

@@ -95,6 +95,8 @@ async def get_highest_permission(
         return PermissionLevel.MOD
     elif member.id in globals.bot_banned_users:
         return PermissionLevel.BOT_BANNED
+    elif member.id in globals.guilds[guild.id].trusted_members:
+        return PermissionLevel.TRUSTED_MEMBER
     else:
         return PermissionLevel.MEMBER
 

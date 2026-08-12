@@ -2,6 +2,16 @@
 import re
 
 
+def make_x_chars_long(p_input: str, x: int, ellipses: bool = True) -> str:
+    if len(p_input) < x:
+        return p_input
+    else:
+        if ellipses:
+            return p_input[0 : x - 2] + "..."
+        else:
+            return p_input[0 : x + 1]
+
+
 def regex_checker(p_input: str, rgx: list) -> bool:
     check = False
     for i in rgx:

@@ -1,6 +1,6 @@
 import discord
 
-from . import personal_channel_manager, storage
+from . import personal_channel_manager, playback, storage
 
 
 class GuildStorage:
@@ -15,7 +15,7 @@ class GuildStorage:
     guild: discord.Guild
     stfu_timestamp: int = 0
     # TODO
-    # playback_manager: PlaybackManager
+    playback_manager: playback.playback_manager.PlaybackManager
     # TODO
     personal_channel_manager: personal_channel_manager.PersonalChannelManager
     no_ping_replies_enabled: bool = False
@@ -26,6 +26,8 @@ class GuildStorage:
     new_personal_channel_category_id: int = 0
 
     aliases: dict[str, str]
+
+    trusted_members: list[int]
 
     def __init__(self, guild: discord.Guild) -> None:
         self.kirky_ass_messages = [
@@ -42,6 +44,8 @@ class GuildStorage:
         ]
 
         self.guild = guild
+        self.playback_manager = playback.playback_manager.PlaybackManager(guild)
+
         if not storage.has_guild(guild.id):
             storage.add_guild(guild.id)
         else:
@@ -60,6 +64,7 @@ class GuildStorage:
                 self.enable_the_kirk = bool(data["enable_the_kirk"])
 
             self.aliases = storage.get_aliases(self.guild.id)
+            self.trusted_members = storage.get_trusted(self.guild.id)
 
     async def create_pc_category(self) -> None:
         await self.guild.create_category(name="Personal Channels")
@@ -93,6 +98,22 @@ class GuildStorage:
             "enable_the_kirk",
             int(self.enable_the_kirk),
         )
+
+    def add_trusted(self, id: int) -> bool:
+        if id in self.trusted_members:
+            return False
+
+        self.trusted_members.append(id)
+        storage.add_trusted(self.guild.id, id)
+        return True
+
+    def remove_trusted(self, id: int) -> bool:
+        if id not in self.trusted_members:
+            return False
+
+        self.trusted_members.remove(id)
+        storage.remove_trusted(self.guild.id, id)
+        return True
 
     def add_alias(self, name: str, content: str) -> bool:
         if name in self.aliases:
