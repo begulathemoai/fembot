@@ -118,12 +118,12 @@ def auth(
                 interaction = args[0]
             else:
                 raise TypeError(
-                    'Une interaction Discord devrait être fournie soit en premier argument, soit en keyword argument de nom "interaction".'
+                    'a Discord Interaction should be given either as the first argument, or as a keyword argument named "interaction".'
                 )
 
             if not globals.is_guild_allowed(interaction.guild_id):
                 await interaction.response.send_message(
-                    "cette instance de fembot n'est pas disponible sur ce serveur",
+                    "this fembot instance is not available on this server.",
                     ephemeral=True,
                 )
                 return True
@@ -133,25 +133,25 @@ def auth(
             )
             if user_level == PermissionLevel.BOT_BANNED:
                 await interaction.response.send_message(
-                    "Tu es banni de cette instance de fembot. Envoie un DM à son owner si tu penses que c'est une erreur.",
+                    "you have been banned from this fembot instance. send a dm to its owner if you think something's wrong.",
                     ephemeral=True,
                 )
                 return True
             elif user_level == PermissionLevel.SERVER_BANNED:
                 await interaction.response.send_message(
-                    "Ce serveur t'a enlevé l'accès à fembot. Contacte l'owner si tu penses que c'est une erreur.",
+                    "this server removed your access to fembot. get in touch with the owner if you think something's wrong.",
                     ephemeral=True,
                 )
                 return True
             elif user_level.value < auth_level.value:
                 await interaction.response.send_message(
-                    f"Tu n'as pas les permissions requises pour pouvoir exécuter cette commande. Permissions requises : {auth_level.name}; Permissions actuelles : {user_level.name}",
+                    f"you don't have the necessary permissions to run this command. minimum permissions : {auth_level.name}; your permissions : {user_level.name}",
                     ephemeral=True,
                 )
                 return True
             elif not globals.ready:
                 await interaction.response.send_message(
-                    "fembot est encore en cours de lancement, merci d'attendre...",
+                    "fembot is still starting, please wait...",
                     ephemeral=True,
                 )
                 return True
@@ -168,14 +168,14 @@ def auth(
                 actual_ephemeral = kwargs["ephemeral"]
 
             await interaction.response.send_message(
-                "Commande authentifiée...", ephemeral=actual_ephemeral
+                "Command authenticated...", ephemeral=actual_ephemeral
             )
 
             try:
                 out = await func(*args, **kwargs)
             except Exception as e:
                 err_out = (
-                    f"fembot a rencontré une erreur :\n**{type(e).__name__}** : {e!s}"
+                    f"fembot encountered an error :\n**{type(e).__name__}** : {e!s}"
                 )
                 if globals.owner_id != -1:
                     err_out += f"\n-# ||<@{globals.owner_id}>||"

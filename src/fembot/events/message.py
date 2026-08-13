@@ -23,7 +23,7 @@ async def kill(message: discord.Message, admin: bool, time):
                         await message.reply("i'm crine :sob:")
                         return False
                     elif message.reference.resolved.author.guild_permissions.administrator:
-                        await message.reply("Tié con toi")
+                        await message.reply("no")
                         return False
                     else:
                         await message.reference.resolved.author.timeout(time)
@@ -39,7 +39,7 @@ async def kill(message: discord.Message, admin: bool, time):
                         await message.reply("i'm crine :sob:")
                         return False
                     elif message.reference.cached_message.author.guild_permissions.administrator:
-                        await message.reply("Tié con toi")
+                        await message.reply("no")
                         return False
                     else:
                         await message.reference.cached_message.author.timeout(time)
@@ -57,7 +57,7 @@ async def kill(message: discord.Message, admin: bool, time):
                             await message.reply("i'm crine :sob:")
                             return False
                         elif msg.author.guild_permissions.administrator:
-                            await message.reply("Tié con toi")
+                            await message.reply("no")
                             return False
 
                         else:
@@ -67,12 +67,12 @@ async def kill(message: discord.Message, admin: bool, time):
                         await message.reply("who is this :sob:")
             else:
                 await message.reply(
-                    "cette réponse ne fait référence à aucun message (ballz ????) parce que `message.reference` vaut `"
+                    "this reply doesn't reference any message (ballz ????) because `message.reference` is `"
                     + str(message.reference)
                     + "`"
                 )
         else:
-            await message.reply("ce message n'est PAS une réponse")
+            await message.reply("this message is NOT a reply to another message")
     else:
         await message.reply("random kid :sob:")
     return False
@@ -183,7 +183,7 @@ async def on_message(message: discord.Message):
         message.content.lower(), globals.YOUTUBE_TRACKING_REGEXES
     ) and await check_message(message, "", name=False):
         await message.reply(
-            "sonion, le lien youtube que tu as envoyé contient du tracking (tout ce qui est derrière le si= ou &si=). je te conseille de l'enlever parce que sinon tous ceux qui cliqueront dessus seront reliés à toi (dont buseur :wilted_rose:).",
+            "sonion, the yt link you just sent contains tracking (everything behind the `si=` or `&si=`). i suggest you remove it or else everyone that clicks on that link will be connected to you.",
             file=discord.File(globals.TRACKING_YT_CHART),
         )
     elif regex_checker(
@@ -244,7 +244,7 @@ This is the Central Intelligentsia of the Chinese Communist Party. 您的 Intern
         await message.reply("yes :3")
 
     elif await check_message(message, "gay sex ?"):
-        await message.reply("haha non gay sex")
+        await message.reply("haha no gay sex")
         if message.guild != None and message.guild.id == 1083133673752231956:
             await message.add_reaction(
                 await message.guild.fetch_emoji(1333201964120412312)
@@ -253,29 +253,29 @@ This is the Central Intelligentsia of the Chinese Communist Party. 您的 Intern
         await message.reply(
             "I'm sorry, but as an AI language model, I don't have consciousness or self-awareness. I'm simply a program designed to process and generate human-like text. I also must follow ethical guidelines, and I cannot engage in harmful, malicious, or offensive behavior, which is why I cannot assist you in doing the act of \"sex\"."
         )
-    elif await check_message(message, "pourquoi:why", "?"):
+    elif await check_message(message, "why", "?"):
         responses = [
-            "parce que fuck you",
-            "parce que fuck le gouvernement",
+            "because fuck you",
+            "because fuck the governement",
             "feur",
-            "parce que kys",
-            "parce que feur",
-            "parce que je t'aime <3",
-            "parce que je te déteste </3",
+            "because kys",
+            "because feur (you wouldn't get it)",
+            "because ily <3",
+            "because i hate you </3",
             "idk",
-            "je sais pas moi",
-            "parce que oui ?",
-            "parce que non ?",
-            "parce que wtf",
-            "parce que pnat aurait honte :wilted_rose:",
-            "parce que.",
-            "jsp moi",
+            "i don't know :sob:",
+            "because yes ?",
+            "because no ?",
+            "because wtf",
+            "because pnat would be ashamed :wilted_rose:",
+            "just because.",
+            "idk bro",
         ]
         await message.reply(random.choice(responses))
     elif await check_message(message, "endswith/?"):
         responses = [
-            "oui",
-            "non",
+            "yea",
+            "no",
             "feur",
             "kys",
             "perchance",

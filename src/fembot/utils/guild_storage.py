@@ -29,6 +29,12 @@ class GuildStorage:
 
     trusted_members: list[int]
 
+    everyone_star_role: discord.Role | None = None
+
+    fembot_fan_role: discord.Role | None = None
+
+    trusted_member_role: discord.Role | None = None
+
     def __init__(self, guild: discord.Guild) -> None:
         self.kirky_ass_messages = [
             "\\*tel aviv impressed\\*",
@@ -62,7 +68,20 @@ class GuildStorage:
                 )
             if "enable_the_kirk" in data:
                 self.enable_the_kirk = bool(data["enable_the_kirk"])
-
+            # # # you can't do async shit in the __init__ func........... i'll have to find a better way to do this
+            # if "everyone_star_role" in data:
+            #     everyone_id: int = 0
+            #     try:
+            #         everyone_id = int(data["everyone_star_role"])
+            #     except TypeError:
+            #         pass
+            #     if everyone_id != 0:
+            #         try:
+            #             self.everyone_star_role = await self.guild.fetch_role(
+            #                 everyone_id
+            #             )
+            #         except discord.NotFound:
+            #             pass
             self.aliases = storage.get_aliases(self.guild.id)
             self.trusted_members = storage.get_trusted(self.guild.id)
 
